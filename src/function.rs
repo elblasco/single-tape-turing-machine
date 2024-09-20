@@ -4,14 +4,18 @@ use std::fmt;
 
 use crate::MyErrors;
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub enum Direction {
     Left,
     Right,
+    NotMove,
 }
 
+pub type Key = (String, char);
+pub type Val = (char, String, Direction);
+
 pub struct Function {
-    function: std::collections::HashMap<(String, char), (char, String, Direction)>,
+    function: std::collections::HashMap<Key, Val>,
 }
 
 impl Function {
@@ -35,11 +39,25 @@ impl Function {
         Ok(function)
     }
 
+    pub fn compute(&self, current_state: &str, current_value: char) -> Result<&Val, MyErrors> {
+        match (
+            self.function
+                .get(&(current_state.to_string(), current_value)),
+            self.function.get(&(current_state.to_string(), '*')),
+        ) {
+            (Some(result), _) | (None, Some(result)) => Ok(result),
+            _ => Err(MyErrors::StateNotFound),
+        }
+    }
+
+    //TODO handle not well formatted direction, e.g. 1o _ 1 invalid 4
+
     fn add(&mut self, divided_row: Vec<&str>) {
-        let dir = if divided_row[3] == "r" {
-            Direction::Right
-        } else {
-            Direction::Left
+        let dir = match divided_row[3] {
+            "r" => Direction::Right,
+            "l" => Direction::Left,
+            "*" => Direction::NotMove,
+            _ => Direction::NotMove,
         };
         self.function.insert(
             (
