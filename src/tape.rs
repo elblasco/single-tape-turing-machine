@@ -21,17 +21,22 @@ impl Tape {
         tape
     }
 
-    pub fn do_a_step(&mut self, new_symbol: char, direction: Direction) {
-        self.cells.insert(self.current_index, new_symbol);
+    pub fn write_and_move(&mut self, new_symbol: char, direction: Direction) {
+        self.cells[self.current_index] = new_symbol;
         match direction {
             Direction::Left => self.move_left(),
             Direction::Right => self.move_right(),
+            Direction::NotMove => (),
         }
+    }
+
+    pub fn get_current_value(&self) -> char {
+        *self.cells.get(self.current_index).unwrap()
     }
 
     fn move_left(&mut self) {
         if self.current_index == 0 {
-            self.cells.insert(0, ' ');
+            self.cells.insert(0, '_');
         } else {
             self.current_index.sub_assign(1);
         }
@@ -39,7 +44,7 @@ impl Tape {
 
     fn move_right(&mut self) {
         if self.current_index + 1 == self.cells.len() {
-            self.cells.push(' ');
+            self.cells.push('_');
         }
         self.current_index.add_assign(1);
     }
@@ -47,8 +52,19 @@ impl Tape {
 
 impl fmt::Display for Tape {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let mut string_buf: String = format!("{:?}", self.cells);
+        let mut string_buf: String = String::new();
+
+        for chara in self.cells.iter() {
+            string_buf.push(*chara);
+        }
+
         string_buf.push('\n');
+
+        for _ in 0..self.current_index {
+            string_buf.push(' ');
+        }
+
+        string_buf.push('^');
 
         write!(f, "{}", string_buf)
     }
