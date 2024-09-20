@@ -1,3 +1,6 @@
+mod function;
+
+use crate::function::Function;
 use regex::Regex;
 
 #[derive(Debug)]
@@ -23,6 +26,8 @@ fn main() -> Result<(), MyErrors> {
     let stringified_input: String = input_file.unwrap();
 
     let parsed_input: Vec<String> = parse_input(stringified_input);
+
+    let transition_function: Function = Function::new();
 
     Ok(())
 }
