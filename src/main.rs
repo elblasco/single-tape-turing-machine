@@ -24,15 +24,11 @@ fn main() -> Result<(), MyErrors> {
 
     let transition_function = Function::new(input_path.unwrap())?;
 
-    println!("{transition_function}");
-
     let initial_tape_content: String = user_input("Insert tape initial content")?;
 
     let tape = Tape::new(initial_tape_content);
 
     let initial_state: String = user_input("Insert inital state name")?;
-
-    println!("The initial state is {initial_state}");
 
     let mut tm = TuringMachine::new(tape, transition_function, initial_state);
 
