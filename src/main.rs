@@ -3,14 +3,15 @@ mod machine;
 mod tape;
 
 use function::Function;
-
-use crate::machine::TuringMachine;
+use machine::TuringMachine;
+use tape::Tape;
 
 #[derive(Debug)]
 pub enum MyErrors {
     NoFileProvided,
     OpeningFile,
     Parsing,
+    BadInput,
 }
 
 fn main() -> Result<(), MyErrors> {
@@ -22,7 +23,25 @@ fn main() -> Result<(), MyErrors> {
 
     let transition_function = Function::new(input_path.unwrap())?;
 
-    println!("{}", transition_function);
+    let initial_tape_content: String = user_input("Insert tape initial content")?;
+
+    let tape = Tape::new(initial_tape_content);
+
+    let initial_state: String = user_input("Insert inital state name")?;
+
+    let mut tm = TuringMachine::new(tape, transition_function, initial_state);
 
     Ok(())
+}
+
+fn user_input(output_string: &str) -> Result<String, MyErrors> {
+    println!("{}", output_string);
+
+    let mut user_input = String::new();
+
+    if std::io::stdin().read_line(&mut user_input).is_err() {
+        Err(MyErrors::BadInput)
+    } else {
+        Ok(user_input)
+    }
 }

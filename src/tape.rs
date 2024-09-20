@@ -1,4 +1,5 @@
 use crate::function::Direction;
+use std::fmt;
 use std::ops::{AddAssign, SubAssign};
 
 pub struct Tape {
@@ -7,17 +8,17 @@ pub struct Tape {
 }
 
 impl Tape {
-    pub fn new() -> Self {
-        Tape {
+    pub fn new(input: String) -> Self {
+        let mut tape = Tape {
             cells: Vec::new(),
             current_index: 0,
-        }
-    }
+        };
 
-    pub fn init_fill(&mut self, input: String) {
         for character in input.chars() {
-            self.cells.push(character)
+            tape.cells.push(character)
         }
+
+        tape
     }
 
     pub fn do_a_step(&mut self, new_symbol: char, direction: Direction) {
@@ -41,5 +42,14 @@ impl Tape {
             self.cells.push(' ');
         }
         self.current_index.add_assign(1);
+    }
+}
+
+impl fmt::Display for Tape {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let mut string_buf: String = format!("{:?}", self.cells);
+        string_buf.push('\n');
+
+        write!(f, "{}", string_buf)
     }
 }

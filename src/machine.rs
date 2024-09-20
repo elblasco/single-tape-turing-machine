@@ -4,11 +4,11 @@ use crate::tape::Tape;
 pub struct TuringMachine {
     tape: Tape,
     transition_function: Function,
-    current_state: char,
+    current_state: String,
 }
 
 impl TuringMachine {
-    pub fn new(tape: Tape, transition_function: Function, starting_state: char) -> Self {
+    pub fn new(tape: Tape, transition_function: Function, starting_state: String) -> Self {
         TuringMachine {
             tape,
             transition_function,
