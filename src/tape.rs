@@ -22,7 +22,9 @@ impl Tape {
     }
 
     pub fn write_and_move(&mut self, new_symbol: char, direction: Direction) {
-        self.cells[self.current_index] = new_symbol;
+        if new_symbol != '*' {
+            self.cells[self.current_index] = new_symbol;
+        }
         match direction {
             Direction::Left => self.move_left(),
             Direction::Right => self.move_right(),
