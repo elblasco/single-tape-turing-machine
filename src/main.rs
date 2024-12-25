@@ -16,17 +16,17 @@ pub enum MyErrors {
 }
 
 fn main() -> Result<(), MyErrors> {
-    let input_path = std::env::args().nth(1);
+    let input_path: Option<String> = std::env::args().nth(1);
 
     if input_path.is_none() {
         return Err(MyErrors::NoFileProvided);
     }
 
-    let transition_function = Function::new(&input_path.unwrap())?;
+    let transition_function: Function = Function::new(&input_path.unwrap())?;
 
     let initial_tape_content: String = user_input("Insert tape initial content")?;
 
-    let tape = Tape::new(initial_tape_content);
+    let tape: Tape = Tape::new(initial_tape_content);
 
     let initial_state: String = user_input("Insert inital state name")?;
 

@@ -27,6 +27,7 @@ impl TuringMachine {
         {
             println!("{}", self.tape);
             if halting_state.is_match(&new_phase.1) {
+                println!("Halted in state {}", &new_phase.1);
                 return Ok(());
             }
             self.current_state = new_phase.1.to_owned();
