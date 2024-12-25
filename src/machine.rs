@@ -19,15 +19,33 @@ impl TuringMachine {
         }
     }
 
+    pub fn get_config(&self) -> (Vec<char>, usize) {
+        (self.tape.get_tape_content(), self.tape.get_current_index())
+    }
+
+    pub fn step(&mut self) -> Result<(), MyErrors> {
+        let halting_state: Regex = Regex::new(r"halt.*").unwrap();
+        if let Ok(new_phase) = self
+            .transition_function
+            .compute(&self.current_state, self.tape.get_current_value())
+        {
+            if halting_state.is_match(&new_phase.1) {
+                return Ok(());
+            }
+            self.current_state = new_phase.1.to_owned();
+            self.tape.write_and_move(new_phase.0, new_phase.2);
+            return Ok(());
+        }
+        Err(MyErrors::StateNotFound)
+    }
+
     pub fn execute(&mut self) -> Result<(), MyErrors> {
         let halting_state: Regex = Regex::new(r"halt.*").unwrap();
         while let Ok(new_phase) = self
             .transition_function
             .compute(&self.current_state, self.tape.get_current_value())
         {
-            println!("{}", self.tape);
             if halting_state.is_match(&new_phase.1) {
-                println!("Halted in state {}", &new_phase.1);
                 return Ok(());
             }
             self.current_state = new_phase.1.to_owned();

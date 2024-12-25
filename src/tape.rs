@@ -8,7 +8,7 @@ pub struct Tape {
 }
 
 impl Tape {
-    pub fn new(input: String) -> Self {
+    pub(crate) fn new(input: String) -> Self {
         let mut tape = Tape {
             cells: Vec::new(),
             current_index: 0,
@@ -21,7 +21,7 @@ impl Tape {
         tape
     }
 
-    pub fn write_and_move(&mut self, new_symbol: char, direction: Direction) {
+    pub(crate) fn write_and_move(&mut self, new_symbol: char, direction: Direction) {
         if new_symbol != '*' {
             self.cells[self.current_index] = new_symbol;
         }
@@ -30,6 +30,14 @@ impl Tape {
             Direction::Right => self.move_right(),
             Direction::NotMove => (),
         }
+    }
+
+    pub fn get_tape_content(&self) -> Vec<char> {
+        self.cells.clone()
+    }
+
+    pub fn get_current_index(&self) -> usize {
+        self.current_index
     }
 
     pub fn get_current_value(&self) -> char {
