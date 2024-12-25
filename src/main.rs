@@ -22,7 +22,7 @@ fn main() -> Result<(), MyErrors> {
         return Err(MyErrors::NoFileProvided);
     }
 
-    let transition_function = Function::new(input_path.unwrap())?;
+    let transition_function = Function::new(&input_path.unwrap())?;
 
     let initial_tape_content: String = user_input("Insert tape initial content")?;
 

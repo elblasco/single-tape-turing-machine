@@ -19,7 +19,7 @@ pub struct Function {
 }
 
 impl Function {
-    pub fn new(input_path: String) -> Result<Self, MyErrors> {
+    pub fn new(input_path: &str) -> Result<Self, MyErrors> {
         let input_file_stringified = std::fs::read_to_string(input_path);
 
         if input_file_stringified.is_err() {
@@ -30,7 +30,8 @@ impl Function {
             function: HashMap::new(),
         };
 
-        let formatted_input = Function::parse_input(input_file_stringified.unwrap());
+        let binding = input_file_stringified.unwrap();
+        let formatted_input = Function::parse_input(&binding);
         for row in formatted_input {
             let divided_row: Vec<&str> = row.split(' ').collect();
             function.add(divided_row);
@@ -72,26 +73,28 @@ impl Function {
         );
     }
 
-    fn parse_input(input_file: String) -> Vec<String> {
-        let remove_comments_regex: Regex = Regex::new(r"\s*;.*").unwrap();
+    fn parse_input(input_file: &str) -> Vec<&str> {
+        let line_comments_regex: Regex = Regex::new(r";.*").unwrap();
 
-        let input_matrix: Vec<&str> = input_file.split('\n').collect();
-        let mut input_matrix_string: Vec<String> = vec![];
-        for element_str in input_matrix {
-            input_matrix_string.push(element_str.to_string());
-        }
+        let mut input_matrix: Vec<&str> = input_file.split('\n').collect();
 
-        // Remove comments after a line of code
-        for elem in input_matrix_string.iter_mut() {
-            let found = remove_comments_regex.find(elem);
-            if let Some(match_struct) = found {
-                elem.drain(match_struct.range());
+        // Drains all the lines that starts with a comment
+        input_matrix.retain(|elem| {
+            let matchy = line_comments_regex.find(elem);
+            matchy.is_none_or(|matchy_some| matchy_some.range().start != 0)
+        });
+
+        // Trims all the lines with inline comments
+        for elem in input_matrix.iter_mut() {
+            if let Some((prefix, _)) = elem.split_once(';') {
+                *elem = prefix.trim_end();
             }
         }
 
-        // Remove commet lines
-        input_matrix_string.retain(|row| !row.is_empty() && !remove_comments_regex.is_match(row));
-        input_matrix_string
+        //Remove all the now-empty lines
+        input_matrix.retain(|elem| !elem.is_empty());
+        println!("{input_matrix:?}");
+        input_matrix
     }
 }
 
