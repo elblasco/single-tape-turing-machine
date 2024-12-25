@@ -1,0 +1,6 @@
+This software includes components licensed under the MIT license:
+
+Library: regex
+Library repo: https://github.com/rust-lang/regex
+
+A copy of the MIT license is included in this distribution under the file LICENSE-MIT.
