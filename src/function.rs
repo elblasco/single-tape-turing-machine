@@ -40,10 +40,14 @@ impl Function {
         Ok(function)
     }
 
-    pub fn compute(&self, current_state: &str, current_value: char) -> Result<&Val, MyErrors> {
+    pub fn compute(&self, current_state: &str, current_symbol: char) -> Result<&Val, MyErrors> {
+        let lookup_tuple = if current_symbol.is_whitespace() {
+            (current_state.to_string(), '_')
+        } else {
+            (current_state.to_string(), current_symbol)
+        };
         match (
-            self.function
-                .get(&(current_state.to_string(), current_value)),
+            self.function.get(&lookup_tuple),
             self.function.get(&(current_state.to_string(), '*')),
         ) {
             (Some(result), _) | (None, Some(result)) => Ok(result),
