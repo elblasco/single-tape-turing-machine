@@ -97,7 +97,6 @@ impl Function {
 
         //Remove all the now-empty lines
         input_matrix.retain(|elem| !elem.is_empty());
-        println!("{input_matrix:?}");
         input_matrix
     }
 }
