@@ -2,6 +2,11 @@
 name = "single-tape-turing-machine"
 version = "0.1.0"
 edition = "2021"
+authors = ["Alessio Blascovich <blascovi@outlook.it>"]
+description = """
+Library for a single tape turing machine based on https://morphett.info/turing/turing.html
+"""
+repository = "https://github.com/elblasco/single-tape-turing-machine"
 
 [dependencies]
 regex = "*"
