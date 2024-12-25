@@ -1,3 +1,4 @@
+; Source https://morphett.info/turing/turing.html
 ; Binary addition - adds two binary numbers
 ; Input: two binary numbers, separated by a single space, eg '100 1110'
 
@@ -31,3 +32,4 @@
 7 y 1 l 7
 7 _ _ r halt
 7 * * l 7
+
